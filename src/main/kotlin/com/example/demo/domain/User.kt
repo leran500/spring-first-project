@@ -1,9 +1,7 @@
 package com.example.demo.domain
 
-import jakarta.persistence.*
 
-
-  data class Message(
+data class User(
 
    var id: String?,
 

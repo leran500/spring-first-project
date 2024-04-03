@@ -2,8 +2,8 @@ package com.example.demo.dao.models
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "Messages") // @entity annotation can be enough => JPA will assume that the table name is Message
- class MessageModel(
+@Table(name = "users") // @entity annotation can be enough => JPA will assume that the table name is Message
+ class UserModel(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     var id: String? = null,

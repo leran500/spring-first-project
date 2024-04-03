@@ -1,4 +1,4 @@
-CREATE TABLE messages
+CREATE TABLE users
 (
     id         VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NULL,

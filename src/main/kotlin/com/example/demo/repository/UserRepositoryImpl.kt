@@ -1,15 +1,17 @@
 package com.example.demo.repository
 
-import com.example.demo.dao.MessageDAO
-import com.example.demo.dao.models.MessageModel
-import com.example.demo.dto.CreateMessageDto
-import com.example.demo.dto.ListMessageDto
+import com.example.demo.dao.UserDAO
+import com.example.demo.dao.models.UserModel
+import com.example.demo.dto.CreateUserDto
+import com.example.demo.dto.ListUserDto
+import com.example.demo.dto.UpdateUserDto
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.criteria.Root
+import org.apache.logging.log4j.message.Message
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -18,15 +20,15 @@ import kotlin.reflect.full.memberProperties
 
 
 @Repository
-class MessageRepositoryImpl(private val messageDao: MessageDAO) : MessageRepository {
+class UserRepositoryImpl(private val userDao: UserDAO) : UserRepository {
     @PersistenceContext
     lateinit var entityManager: EntityManager;
-    override fun getById(id: String): MessageModel = messageDao.getReferenceById(id);
+    override fun getById(id: String): UserModel = userDao.getReferenceById(id);
 
-    override fun list(listMessageDto: ListMessageDto, pageable: Pageable): Page<MessageModel?> {
+    override fun list(listMessageDto: ListUserDto, pageable: Pageable): Page<UserModel?> {
         val cb: CriteriaBuilder = entityManager.criteriaBuilder;
-        val query: CriteriaQuery<MessageModel> = cb.createQuery(MessageModel::class.java)
-        val root: Root<MessageModel> = query.from(MessageModel::class.java)
+        val query: CriteriaQuery<UserModel> = cb.createQuery(UserModel::class.java)
+        val root: Root<UserModel> = query.from(UserModel::class.java)
 
         val predicates = mutableListOf<Predicate>()
         listMessageDto::class.memberProperties.forEach { prop ->
@@ -50,18 +52,21 @@ class MessageRepositoryImpl(private val messageDao: MessageDAO) : MessageReposit
         // Apply pagination
         typedQuery.firstResult = pageable.offset.toInt()
         typedQuery.maxResults = pageable.pageSize
-        val resultList: List<MessageModel> = typedQuery.resultList
+        val resultList: List<UserModel> = typedQuery.resultList
 
 
         return PageImpl(resultList, pageable, resultList.size.toLong());
     }
 
-    override fun deleteById(id: String) {
-        TODO("Not yet implemented")
-    }
+    override fun updateUser(id: String, updateUserDto: UpdateUserDto): UserModel = userDao.save(     UserModel(
+        firstName = updateUserDto.firstName,
+        lastName = updateUserDto.lastName,
+        email = updateUserDto.email,
+        balance = updateUserDto.balance
+    ))
 
-    override fun create(createMessageDto: CreateMessageDto): MessageModel = messageDao.save(
-        MessageModel(
+    override fun create(createMessageDto: CreateUserDto): UserModel = userDao.save(
+        UserModel(
             firstName = createMessageDto.firstName,
             lastName = createMessageDto.lastName,
             email = createMessageDto.email,

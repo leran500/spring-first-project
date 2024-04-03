@@ -1,5 +1,5 @@
 package com.example.demo.dto
-data class ListMessageDto(
+data class ListUserDto(
     val firstName: String? = null,
     val lastName: String? = null,
     val email: String? = null,
